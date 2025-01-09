@@ -1,0 +1,32 @@
+### Get all users
+GET http://localhost:3000/api/users
+
+### Get an individual user
+GET http://localhost:3000/api/users/5
+
+
+### create new user
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+  "username": "Jennifer",
+  "displayname": "Best"
+}
+### update the user
+PUT http://localhost:3000/api/users/1
+Content-Type: application/json
+
+{
+  "name": "Jensen",
+  "displayName": "Jensen"
+}
+### update the user
+PATCH http://localhost:3000/api/users/3
+Content-Type: application/json
+
+{
+  "username": "Jackson"
+}
+### update the user
+DELETE http://localhost:3000/api/users/3
