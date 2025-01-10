@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { mockUsers } from "../utils/constants.mjs";
-import passport from "passport";
+import { Router } from 'express';
+import { mockUsers } from '../utils/constants.mjs';
+import passport from 'passport';
 
 const router = Router();
 
@@ -33,15 +33,23 @@ const router = Router();
 // });
 
 // with passport
-router.post('/',passport.authenticate('local'), (req, res) => {
-  res.send({msg: "Logged in successfully"})
+router.post('/', passport.authenticate('local'), (req, res) => {
+  res.send({ msg: 'Logged in successfully' });
 });
 
 router.get('/status', (req, res) => {
   console.log('Inside /auth/status endpoint');
-  console.log(req.user)
-  console.log(req.session)
-  return req.user ? res.send(req.user): res.sendStatus(401);
-})
+  console.log(req.user);
+  console.log(req.session);
+  return req.user ? res.send(req.user) : res.sendStatus(401);
+});
 
+router.post('/logout', (req, res) => {
+  if (!req.user) return res.sendStatus(401);
+
+  req.logout((err) => {
+    if (err) return res.sendStatus(400);
+    res.sendStatus(200);
+  });
+});
 export default router;
