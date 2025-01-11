@@ -19,10 +19,12 @@ export const resolveIndexByUserId = (req, res, next) => {
 };
 
 export const catchValidationErrors = (req, res, next) => {
-  const result = validationResult(req);
+  const validator = validationResult.withDefaults({
+    formatter: errorFormatter,
+  });
+  const result = validator(req);
   if (!result.isEmpty()) {
-    return res.status(400).send({ errors: errorFormatter(result.array()) });
+    return res.status(400).send({ errors: result.array() });
   }
-
   next();
 };

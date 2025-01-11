@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { mockUsers } from '../utils/constants.mjs';
 import passport from 'passport';
 
 const router = Router();

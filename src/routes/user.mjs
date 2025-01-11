@@ -5,6 +5,7 @@ import validateCreateUser from '../utils/validationSchemas/createUser.mjs';
 import { errorFormatter } from '../utils/errorFormatters.mjs';
 import { catchValidationErrors, resolveIndexByUserId } from '../utils/middlewares.mjs';
 import { validateGetAllUsers } from '../utils/validationSchemas/getAllUsers.mjs';
+import User from '../mongoose/schemas/user.js';
 const router = Router();
 router.get(
   '/',
@@ -44,13 +45,16 @@ router.get('/:id', resolveIndexByUserId, (req, res) => {
   return res.status(200).send(foundUser);
 });
 
-router.post('/', validateCreateUser(), catchValidationErrors, (req, res) => {
-  
+router.post('/', validateCreateUser(), catchValidationErrors, async (req, res) => {
   const data = matchedData(req);
-  console.log(data);
-  const newUser = { id: mockUsers.at(-1).id + 1, ...data };
-  mockUsers.push(newUser);
-  return res.status(201).send(newUser);
+  const newUser = new User(data)
+  try {
+    const savedUser = await newUser.save();
+    return res.status(201).send(savedUser);
+  } catch (error) {
+    console.error(error);
+    return res.sendStatus(400)
+  }
 });
 
 router.put('/:id', resolveIndexByUserId, (req, res) => {

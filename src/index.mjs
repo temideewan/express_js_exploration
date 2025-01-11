@@ -1,12 +1,17 @@
+import mongoose from 'mongoose'
 import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import routes from './routes/index.mjs';
 import passport from 'passport';
-import { mockUsers } from './utils/constants.mjs';
 import './strategies/local-strategy.mjs';
 
 const app = express();
+mongoose.connect('mongodb://localhost:27017/express_tutorial').then(() => {
+  console.log('Connected to database')
+}).catch(err => {
+  console.error(err);
+})
 const oneHourInMilliseconds = 60 * 60 * 1000;
 app.use(express.json());
 app.use(cookieParser('helloworld'));
