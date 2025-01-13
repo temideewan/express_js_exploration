@@ -5,7 +5,9 @@ import cookieParser from 'cookie-parser';
 import routes from './routes/index.mjs';
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
-import './strategies/local-strategy.mjs';
+import 'dotenv/config';
+// import './strategies/local-strategy.mjs';
+import './strategies/discord-strategy.mjs';
 
 const app = express();
 mongoose.connect('mongodb://localhost:27017/express_tutorial').then(() => {

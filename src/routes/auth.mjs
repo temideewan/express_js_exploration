@@ -52,3 +52,11 @@ router.post('/logout', (req, res) => {
   });
 });
 export default router;
+
+router.get("/discord", passport.authenticate('discord'), (req, res) => {
+})
+
+router.get("/discord/redirect", passport.authenticate('discord'), (req,res) => {
+  console.log(req.user)
+  res.sendStatus(200)
+})
