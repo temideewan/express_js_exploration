@@ -3,36 +3,33 @@ import { matchedData, query, validationResult } from 'express-validator';
 import { mockUsers } from '../utils/constants.mjs';
 import validateCreateUser from '../utils/validationSchemas/createUser.mjs';
 import { errorFormatter } from '../utils/errorFormatters.mjs';
-import { catchValidationErrors, resolveIndexByUserId } from '../utils/middlewares.mjs';
+import {
+  catchValidationErrors,
+  resolveIndexByUserId,
+} from '../utils/middlewares.mjs';
 import { validateGetAllUsers } from '../utils/validationSchemas/getAllUsers.mjs';
 import User from '../mongoose/schemas/user.js';
+import { hashPassword } from '../utils/helpers.js';
 const router = Router();
-router.get(
-  '/',
-  validateGetAllUsers(),
-  catchValidationErrors,
-  (req, res) => {
-    console.log(`session ${req.session}`);
-    console.log(`sessionID ${req.sessionID}`);
-    console.log(
-      req.sessionStore.get(req.sessionID, (err, sessionData) => {
-        if (err) {
-          throw err;
-        }
-        console.log(`sessionData`, sessionData);
-      })
-    );
-    const {
-      query: { filter, value },
-    } = req;
-
-    if (filter && value) {
-      console.log('has filter  and value');
-      return res.send(mockUsers.filter((user) => user[filter].includes(value)));
+router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
+  console.log(`session ${req.session}`);
+  console.log(`sessionID ${req.sessionID}`);
+  req.sessionStore.get(req.sessionID, (err, sessionData) => {
+    if (err) {
+      throw err;
     }
-    return res.send(mockUsers);
+    console.log(`sessionData`, sessionData);
+  });
+  const {
+    query: { filter, value },
+  } = req;
+
+  if (filter && value) {
+    console.log('has filter  and value');
+    return res.send(mockUsers.filter((user) => user[filter].includes(value)));
   }
-);
+  return res.send(mockUsers);
+});
 
 router.get('/:id', resolveIndexByUserId, (req, res) => {
   console.log(req.params);
@@ -45,17 +42,23 @@ router.get('/:id', resolveIndexByUserId, (req, res) => {
   return res.status(200).send(foundUser);
 });
 
-router.post('/', validateCreateUser(), catchValidationErrors, async (req, res) => {
-  const data = matchedData(req);
-  const newUser = new User(data)
-  try {
-    const savedUser = await newUser.save();
-    return res.status(201).send(savedUser);
-  } catch (error) {
-    console.error(error);
-    return res.sendStatus(400)
+router.post(
+  '/',
+  validateCreateUser(),
+  catchValidationErrors,
+  async (req, res) => {
+    const data = matchedData(req);
+    data.password = hashPassword(data.password);
+    const newUser = new User(data);
+    try {
+      const savedUser = await newUser.save();
+      return res.status(201).send(savedUser);
+    } catch (error) {
+      console.error(error);
+      return res.sendStatus(400);
+    }
   }
-});
+);
 
 router.put('/:id', resolveIndexByUserId, (req, res) => {
   const { body, foundUserIndex } = req;
