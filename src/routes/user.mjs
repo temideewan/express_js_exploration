@@ -10,6 +10,7 @@ import {
 import { validateGetAllUsers } from '../utils/validationSchemas/getAllUsers.mjs';
 import User from '../mongoose/schemas/user.js';
 import { hashPassword } from '../utils/helpers.js';
+import getUserByIdController from '../controllers/users.mjs';
 const router = Router();
 router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
   console.log(`session ${req.session}`);
@@ -31,16 +32,7 @@ router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
   return res.send(mockUsers);
 });
 
-router.get('/:id', resolveIndexByUserId, (req, res) => {
-  console.log(req.params);
-  const { foundUserIndex } = req;
-  const foundUser = mockUsers[foundUserIndex];
-  if (!foundUser) {
-    return res.status(404).send({ msg: 'User not found.' });
-  }
-
-  return res.status(200).send(foundUser);
-});
+router.get('/:id', resolveIndexByUserId, getUserByIdController);
 
 router.post(
   '/',
