@@ -1,16 +1,12 @@
 import { Router } from 'express';
-import { matchedData, query, validationResult } from 'express-validator';
 import { mockUsers } from '../utils/constants.mjs';
 import validateCreateUser from '../utils/validationSchemas/createUser.mjs';
-import { errorFormatter } from '../utils/errorFormatters.mjs';
 import {
   catchValidationErrors,
   resolveIndexByUserId,
 } from '../utils/middlewares.mjs';
 import { validateGetAllUsers } from '../utils/validationSchemas/getAllUsers.mjs';
-import User from '../mongoose/schemas/user.js';
-import { hashPassword } from '../utils/helpers.js';
-import getUserByIdController from '../controllers/users.mjs';
+import { createUserController, getUserByIdController } from '../controllers/users.mjs';
 const router = Router();
 router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
   console.log(`session ${req.session}`);
@@ -34,23 +30,7 @@ router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
 
 router.get('/:id', resolveIndexByUserId, getUserByIdController);
 
-router.post(
-  '/',
-  validateCreateUser(),
-  catchValidationErrors,
-  async (req, res) => {
-    const data = matchedData(req);
-    data.password = hashPassword(data.password);
-    const newUser = new User(data);
-    try {
-      const savedUser = await newUser.save();
-      return res.status(201).send(savedUser);
-    } catch (error) {
-      console.error(error);
-      return res.sendStatus(400);
-    }
-  }
-);
+router.post('/', validateCreateUser(), catchValidationErrors, createUserController);
 
 router.put('/:id', resolveIndexByUserId, (req, res) => {
   const { body, foundUserIndex } = req;

@@ -9,3 +9,5 @@ export const mockUsers = [
   { id: 8, username: 'Favour', displayname: 'Favour', password: 'hello1210' },
   { id: 9, username: 'Esther', displayname: 'Esther', password: 'hello1211' },
 ];
+
+export const defaultErrorMessage = 'An error occurred';
