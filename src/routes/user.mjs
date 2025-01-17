@@ -9,20 +9,16 @@ import { validateGetAllUsers } from '../utils/validationSchemas/getAllUsers.mjs'
 import { createUserController, getUserByIdController } from '../controllers/users.mjs';
 const router = Router();
 router.get('/', validateGetAllUsers(), catchValidationErrors, (req, res) => {
-  console.log(`session ${req.session}`);
-  console.log(`sessionID ${req.sessionID}`);
   req.sessionStore.get(req.sessionID, (err, sessionData) => {
     if (err) {
       throw err;
     }
-    console.log(`sessionData`, sessionData);
   });
   const {
     query: { filter, value },
   } = req;
 
   if (filter && value) {
-    console.log('has filter  and value');
     return res.send(mockUsers.filter((user) => user[filter].includes(value)));
   }
   return res.send(mockUsers);

@@ -21,7 +21,6 @@ export const resolveIndexByUserId = (req, res, next) => {
 export const catchValidationErrors = (req, res, next) => {
   const result = validationResult(req)
   const isEmpty = !result.isEmpty();
-  console.log(isEmpty);
   if (isEmpty) {
     return res.status(400).send({ errors: result.array().map(errorFormatter) });
   }

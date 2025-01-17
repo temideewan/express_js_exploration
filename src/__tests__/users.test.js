@@ -33,7 +33,7 @@ const mockResponse = {
   status: vi.fn(() => mockResponse),
 };
 
-describe('get users', () => {
+describe('get user id', () => {
   it('should get user by id', () => {
     const spied = vi.spyOn(mockResponse, 'send');
     getUserByIdController(mockRequest, mockResponse);
