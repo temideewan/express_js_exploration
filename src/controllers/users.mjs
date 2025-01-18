@@ -1,6 +1,6 @@
 import { matchedData } from 'express-validator';
 import { mockUsers } from '../utils/constants.mjs';
-import { hashPassword } from '../utils/helpers';
+import { hashPassword } from '../utils/helpers.js';
 import User from '../mongoose/schemas/user.js'
 
 export const getUserByIdController = (req, res) => {

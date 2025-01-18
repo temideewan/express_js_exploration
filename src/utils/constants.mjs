@@ -11,3 +11,4 @@ export const mockUsers = [
 ];
 
 export const defaultErrorMessage = 'An error occurred';
+export const oneHourInMilliseconds = 60 * 60 * 1000;

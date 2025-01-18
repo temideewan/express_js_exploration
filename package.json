@@ -5,6 +5,7 @@
   "main": "index.mjs",
   "scripts": {
     "test": "vitest",
+    "test:e2e":"vitest --dir ./src/e2e",
     "dev": "nodemon ./src/index.mjs",
     "start": "node ./src/index.mjs"
   },
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
+    "supertest": "^7.0.0",
     "vitest": "^2.1.8"
   },
   "type": "module"

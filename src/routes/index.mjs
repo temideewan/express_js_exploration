@@ -6,9 +6,11 @@ import authRouter from './auth.mjs';
 
 const router = Router();
 
-router.use('/api/users', usersRouter);
-router.use('/api/products', productsRouter);
-router.use('/api/cart', cartRouter);
-router.use('/api/auth', authRouter);
+router.use('/users', usersRouter);
+router.use('/products', productsRouter);
+router.use('/cart', cartRouter);
+router.use('/auth', authRouter);
 
-export default router;
+export const configRouter = (expressApp) => {
+  expressApp.use('/api',router);
+}
