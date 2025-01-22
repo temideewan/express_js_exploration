@@ -5,7 +5,7 @@ import { configRouter } from './routes/index.mjs';
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
 import { oneHourInMilliseconds } from './utils/constants.mjs';
-export default function configureApp() {
+export default function configureApp(mongoose) {
   const app = express();
   
   app.use(express.json());
@@ -19,7 +19,7 @@ export default function configureApp() {
         maxAge: oneHourInMilliseconds,
       },
       store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
+        client: mongoose.connection.getClient(),
       }),
     })
   );

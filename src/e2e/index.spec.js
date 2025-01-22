@@ -1,15 +1,29 @@
 import request from 'supertest';
+import configureApp from '../configureApplication.mjs';
+import mongoose from 'mongoose';
+import { afterAll, beforeAll } from 'vitest';
 
-import express from 'express';
-
-const app = express();
-
-app.get('/hello', (req, res) => res.status(201).json({ message: "Hello, world!"}));
-
-describe('hello endpoint', () => {
-  it('get /hello endpoint and return 200', async() => {
-    console.log('first')
-    const res = await request(app).get('/hello')
-    expect(res.statusCode).toBe(200)
+describe('/api/auth', () => {
+  let app;
+  beforeAll(() => {
+    mongoose
+      .connect('mongodb://localhost:27017/express_tutorial_test')
+      .then(() => {
+        console.log('Connected to database');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    app = configureApp(mongoose);
   });
+  it('should return 401 wen not logged in', async () => {
+    const resp = await request(app).get('/api/auth/status');
+    expect(resp.statusCode).toBe(401);
+  });
+
+  afterAll(async() => {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    console.log('Database connection closed');
+  })
 });
