@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import 'dotenv/config';
-import './strategies/local-strategy.mjs';
 import configureApp from './configureApplication.mjs';
 // import './strategies/discord-strategy.mjs';
 const PORT = process.env.PORT || 3000;

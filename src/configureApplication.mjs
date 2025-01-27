@@ -5,6 +5,7 @@ import { configRouter } from './routes/index.mjs';
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
 import { oneHourInMilliseconds } from './utils/constants.mjs';
+import './strategies/local-strategy.mjs';
 export default function configureApp(mongoose) {
   const app = express();
   

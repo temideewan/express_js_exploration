@@ -33,7 +33,7 @@ const router = Router();
 
 // with passport
 router.post('/', passport.authenticate('local'), (req, res) => {
-  res.send({ msg: 'Logged in successfully' });
+  res.status(200).send({ msg: 'Logged in successfully' });
 });
 
 router.get('/status', (req, res) => {
